@@ -97,7 +97,7 @@ public class Main extends Application {
         iw.setPreserveRatio(true);
 
         refreshButton.setGraphic(iw);
-     
+
 
 
         hboxTop.getChildren().addAll(urlLabel, webadress, refreshButton, regionButton, webButton);

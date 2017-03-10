@@ -1,16 +1,19 @@
 package com.company;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+
+
 
 public class Main extends Application {
 
@@ -39,6 +42,10 @@ public class Main extends Application {
     private TextField loginInput = new TextField("tom");
     private PasswordField passInput = new PasswordField();
     private  Stage mainStage = new Stage();
+
+
+    private Button refreshButton = new Button();
+
 
     public static void main(String[] args) {
 
@@ -82,7 +89,18 @@ public class Main extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(menu);
 
-        hboxTop.getChildren().addAll(urlLabel, webadress, regionButton, webButton);
+
+        Image refreshImage = new Image(getClass().getResourceAsStream("refresh.png"));
+        ImageView iw = new ImageView(refreshImage);
+        iw.setFitHeight(100);
+        iw.setFitWidth(100);
+        iw.setPreserveRatio(true);
+
+        refreshButton.setGraphic(iw);
+     
+
+
+        hboxTop.getChildren().addAll(urlLabel, webadress, refreshButton, regionButton, webButton);
 
 
 
@@ -90,6 +108,12 @@ public class Main extends Application {
         onActionButtons();
 
         editBooksMarks();
+
+        refreshButton.setOnAction(e-> {
+
+           webView.getEngine().reload();
+
+        });
 
 
 
@@ -185,6 +209,7 @@ public class Main extends Application {
 
         }
     }
+
 
     }
 

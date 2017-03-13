@@ -1,15 +1,17 @@
 package com.company;
 
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -21,7 +23,6 @@ public class WebWindow {
     private Region region = new Region();
     private Label urlLabel = new Label("Indtast url:   ");
     private VBox vBoxLeft = new VBox(10);
-    private Button refreshButton = new Button();
     private TextField webadress = new TextField();
     private Button webButton = new Button("Go to site");
     private WebView webView = new WebView();
@@ -32,9 +33,15 @@ public class WebWindow {
     private Button facebookButton = new Button("Facebook");
     private Button redditButton = new Button("Reddit");
 
+    //Button with images
+    private Button refreshButton = new Button();
+    private Button rightArrow = new Button();
+    private Button leftArrow = new Button();
+
+
     private Stage mainStage = new Stage();
 
-    void webWindow() {
+    void openMainWindow() {
         mainStage.setTitle("Web app");
 
         BorderPane borderPane = new BorderPane();
@@ -52,6 +59,8 @@ public class WebWindow {
         hboxButton.setPadding(new Insets(10, 10, 10, 10));
         borderPane.setBottom(hboxButton);
         hboxButton.getChildren().addAll(copyrightLabel, region);
+        Region regionButton = new Region();
+        hboxButton.setHgrow(regionButton, Priority.ALWAYS);
 
         //left
         borderPane.setLeft(vBoxLeft);
@@ -64,21 +73,27 @@ public class WebWindow {
         hboxTop.setPadding(new Insets(10, 10, 10, 10));
         webadress.setPrefWidth(600.0);
 
-        Region regionButton = new Region();
-        hboxButton.setHgrow(regionButton, Priority.ALWAYS);
+
+
 
 
 
 
         Image refreshImage = new Image(getClass().getResourceAsStream("refresh.png"), 20, 20, true, true);
         ImageView iw = new ImageView(refreshImage);
-
-
         refreshButton.setGraphic(iw);
-        hboxTop.setSpacing(10);
+
+        Image leftArrowPic = new Image(getClass().getResourceAsStream("leftarrow2.png"), 20,20,true,true);
+        ImageView leftArrowImage = new ImageView(leftArrowPic);
+        leftArrow.setGraphic(leftArrowImage);
+
+        Image rightArrowPic = new Image(getClass().getResourceAsStream("rightArrow.png"), 20,20,true,true);
+        ImageView rightArrowImage = new ImageView(rightArrowPic);
+        rightArrow.setGraphic(rightArrowImage);
 
 
-        hboxTop.getChildren().addAll(urlLabel, webadress, refreshButton, regionButton, webButton);
+
+        hboxTop.getChildren().addAll(urlLabel, leftArrow, rightArrow, webadress, refreshButton, regionButton, webButton);
 
 
         //all of the buttoms methodes
@@ -104,7 +119,7 @@ public class WebWindow {
     }
 
 
-    public void onActionButtons() {
+    private void onActionButtons() {
 
         googleButton.setOnAction(e -> webView.getEngine().load("http://google.dk"));
         youtubeButton.setOnAction(e -> webView.getEngine().load("http://youtube.com"));
@@ -120,6 +135,39 @@ public class WebWindow {
             if (e.getCode() == KeyCode.ENTER) {
                 webView.getEngine().load("http://" + webadress.getText());
             }
+        });
+
+
+        // below is back and fourth actions
+        //THESE METHODS FOR LEFTARROW AND RIGHTARROW ARE TAKEN FROM THE INTERNET @STACKPANE.COM
+        leftArrow.setOnAction(e-> {
+
+           final WebHistory history = webView.getEngine().getHistory(); //the final keyword
+            ObservableList<WebHistory.Entry> entryList = history.getEntries();
+            int currentIndex = history.getCurrentIndex();
+
+            Platform.runLater(() ->
+            {
+                history.go(entryList.size() > 1
+                        && currentIndex > 0
+                        ? -1
+                        : 0);
+            });
+        });
+
+        rightArrow.setOnAction(e->{
+
+            final WebHistory history = webView.getEngine().getHistory();
+            ObservableList<WebHistory.Entry> entryList = history.getEntries();
+            int currentIndex = history.getCurrentIndex();
+
+            Platform.runLater(() ->
+            {
+                history.go(entryList.size() > 1
+                        && currentIndex < entryList.size() - 1
+                        ? 1
+                        : 0);
+            });
         });
 
 

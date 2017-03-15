@@ -133,6 +133,7 @@ public class WebWindow {
 
 
         Scene scene = new Scene(borderPane);
+        scene.getStylesheets().addAll(this.getClass().getResource("WebWindowStylesheet.css").toExternalForm());
 
         mainStage.setScene(scene);
         mainStage.show();
@@ -163,7 +164,7 @@ public class WebWindow {
 
 
         // below is back and fourth actions
-        //
+        //code below is taken from STACKPANE.COM and is NOT original. Everything else is original code.
         leftArrow.setOnAction(e-> {
 
            final WebHistory history = webView.getEngine().getHistory(); //the final keyword

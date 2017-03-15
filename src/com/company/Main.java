@@ -51,7 +51,6 @@ private Region regionTop = new Region();
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-
         primaryStage.setTitle("Login page");
         passInput.setPromptText("Password");
         passInput.setAlignment(Pos.CENTER);

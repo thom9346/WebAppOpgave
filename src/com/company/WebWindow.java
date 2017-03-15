@@ -25,7 +25,10 @@ public class WebWindow {
     private VBox vBoxLeft = new VBox(10);
     private TextField webadress = new TextField();
     private Button webButton = new Button("Go to site");
+    private Button favButton = new Button("Bookmark page");
     private WebView webView = new WebView();
+    private Button addedButton;
+
 
     //bookmark buttons
     private Button googleButton = new Button("Google");
@@ -58,7 +61,10 @@ public class WebWindow {
         hboxButton.setHgrow(region, Priority.ALWAYS);
         hboxButton.setPadding(new Insets(10, 10, 10, 10));
         borderPane.setBottom(hboxButton);
-        hboxButton.getChildren().addAll(copyrightLabel, region);
+        hboxButton.getChildren().addAll(copyrightLabel, region,favButton);
+
+
+
         Region regionButton = new Region();
         hboxButton.setHgrow(regionButton, Priority.ALWAYS);
 
@@ -66,6 +72,22 @@ public class WebWindow {
         borderPane.setLeft(vBoxLeft);
         vBoxLeft.setPadding(new Insets(10, 10, 10, 10));
         vBoxLeft.getChildren().addAll(googleButton, youtubeButton, facebookButton, redditButton);
+
+
+        favButton.setOnAction(e-> {
+
+             String buttonText;
+
+            buttonText = webView.getEngine().getLocation();
+            addedButton = new Button(buttonText);
+            vBoxLeft.getChildren().add(addedButton);
+
+
+            addedButton.setOnAction(a-> webView.getEngine().load(buttonText));
+
+        });
+
+
 
         //top
         HBox hboxTop = new HBox(10);
@@ -138,8 +160,10 @@ public class WebWindow {
         });
 
 
+
+
         // below is back and fourth actions
-        //THESE METHODS FOR LEFTARROW AND RIGHTARROW ARE TAKEN FROM THE INTERNET @STACKPANE.COM
+        //
         leftArrow.setOnAction(e-> {
 
            final WebHistory history = webView.getEngine().getHistory(); //the final keyword

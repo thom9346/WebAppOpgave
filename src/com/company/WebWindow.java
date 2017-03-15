@@ -15,11 +15,13 @@ import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 /**
  * Created by Thomas on 09-03-2017.
  */
 public class WebWindow {
-    private Label copyrightLabel = new Label("Copyright of Thomas Holmegaard");
+    private Label copyrightLabel = new Label("©KEA, Thomas Holmegaard");
     private Region region = new Region();
     private Label urlLabel = new Label("Indtast url:   ");
     private VBox vBoxLeft = new VBox(10);
@@ -77,9 +79,19 @@ public class WebWindow {
         favButton.setOnAction(e-> {
 
              String buttonText;
+            String showedMessage;
+
 
             buttonText = webView.getEngine().getLocation();
-            addedButton = new Button(buttonText);
+
+            if(buttonText.charAt(4) == 's') {
+                 showedMessage = buttonText.replaceAll("https://www.", "");
+            }
+            else
+                showedMessage = buttonText.replaceAll("http://www.", "");
+
+
+            addedButton = new Button(showedMessage);
             vBoxLeft.getChildren().add(addedButton);
 
 

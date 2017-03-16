@@ -20,6 +20,7 @@ import java.util.Arrays;
 /**
  * Created by Thomas on 09-03-2017.
  */
+
 public class WebWindow {
     private Label copyrightLabel = new Label("©KEA, Thomas Holmegaard");
     private Region region = new Region();
@@ -46,6 +47,8 @@ public class WebWindow {
 
     private Stage mainStage = new Stage();
 
+private BookmarkName bookmarkName = new BookmarkName();
+
     void openMainWindow() {
         mainStage.setTitle("Web app");
 
@@ -56,6 +59,7 @@ public class WebWindow {
         borderPane.setCenter(vBoxCenter);
         webView.setPrefWidth(1000.0);
         webView.setPrefHeight(900.0);
+        webView.getEngine().load("http://dr.dk");
         vBoxCenter.getChildren().addAll(webView);
 
         //buttom
@@ -78,20 +82,17 @@ public class WebWindow {
 
         favButton.setOnAction(e-> {
 
-             String buttonText;
-            String showedMessage;
+
+            String buttonText = webView.getEngine().getLocation();
+            String[] domainPart = buttonText.split("/");
+//^ cuts out the ID link behind the domain link so the buttom doesnt show the exact link to the destination
 
 
-            buttonText = webView.getEngine().getLocation();
 
-            if(buttonText.charAt(4) == 's') {
-                 showedMessage = buttonText.replaceAll("https://www.", "");
-            }
-            else
-                showedMessage = buttonText.replaceAll("http://www.", "");
+          //  bookmarkName.chooseName(); This method will allow you to choose a name for the bookmarks, BUT i CANNOT iterate through them more than once.
+            // i'd liek to know why..
 
-
-            addedButton = new Button(showedMessage);
+            addedButton = new Button(domainPart[2]);
             vBoxLeft.getChildren().add(addedButton);
 
 
@@ -176,36 +177,33 @@ public class WebWindow {
 
 
         // below is back and fourth actions
-        //code below is taken from STACKPANE.COM and is NOT original. Everything else is original code.
+
         leftArrow.setOnAction(e-> {
 
-           final WebHistory history = webView.getEngine().getHistory(); //the final keyword
-            ObservableList<WebHistory.Entry> entryList = history.getEntries();
-            int currentIndex = history.getCurrentIndex();
+            WebHistory history = webView.getEngine().getHistory();
+            history.go(-1);
 
-            Platform.runLater(() ->
-            {
-                history.go(entryList.size() > 1
-                        && currentIndex > 0
-                        ? -1
-                        : 0);
+            //code below is taken from STACKPANE.COM and is NOT original. It's therefore not used in this assigmenets but is an exmaple of how it could also be done
+//           final WebHistory history = webView.getEngine().getHistory(); //the final keyword
+//            ObservableList<WebHistory.Entry> entryList = history.getEntries();
+//            int currentIndex = history.getCurrentIndex();
+//
+//            Platform.runLater(() ->
+//            {
+//                history.go(entryList.size() > 1
+//                        && currentIndex > 0
+//                        ? -1
+//                        : 0);
             });
-        });
+
+
 
         rightArrow.setOnAction(e->{
 
-            final WebHistory history = webView.getEngine().getHistory();
-            ObservableList<WebHistory.Entry> entryList = history.getEntries();
-            int currentIndex = history.getCurrentIndex();
+            WebHistory history = webView.getEngine().getHistory();
+            history.go(1);
 
-            Platform.runLater(() ->
-            {
-                history.go(entryList.size() > 1
-                        && currentIndex < entryList.size() - 1
-                        ? 1
-                        : 0);
-            });
-        });
+       });
 
 
     }
